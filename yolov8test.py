@@ -18,19 +18,92 @@ cap2.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 # Load YOLO model
 model = YOLO("yolov8n.pt")
 model.classes = [0]  # Detect only 'person'
-model.to('cuda')
+model.to("cuda")
 
 # Object classes
-classNames = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus", "train", "truck", "boat",
-              "traffic light", "fire hydrant", "stop sign", "parking meter", "bench", "bird", "cat",
-              "dog", "horse", "sheep", "cow", "elephant", "bear", "zebra", "giraffe", "backpack", "umbrella",
-              "handbag", "tie", "suitcase", "frisbee", "skis", "snowboard", "sports ball", "kite", "baseball bat",
-              "baseball glove", "skateboard", "surfboard", "tennis racket", "bottle", "wine glass", "cup",
-              "fork", "knife", "spoon", "bowl", "banana", "apple", "sandwich", "orange", "broccoli",
-              "carrot", "hot dog", "pizza", "donut", "cake", "chair", "sofa", "pottedplant", "bed",
-              "diningtable", "toilet", "tvmonitor", "laptop", "mouse", "remote", "keyboard", "cell phone",
-              "microwave", "oven", "toaster", "sink", "refrigerator", "book", "clock", "vase", "scissors",
-              "teddy bear", "hair drier", "toothbrush"]
+classNames = [
+    "person",
+    "bicycle",
+    "car",
+    "motorbike",
+    "aeroplane",
+    "bus",
+    "train",
+    "truck",
+    "boat",
+    "traffic light",
+    "fire hydrant",
+    "stop sign",
+    "parking meter",
+    "bench",
+    "bird",
+    "cat",
+    "dog",
+    "horse",
+    "sheep",
+    "cow",
+    "elephant",
+    "bear",
+    "zebra",
+    "giraffe",
+    "backpack",
+    "umbrella",
+    "handbag",
+    "tie",
+    "suitcase",
+    "frisbee",
+    "skis",
+    "snowboard",
+    "sports ball",
+    "kite",
+    "baseball bat",
+    "baseball glove",
+    "skateboard",
+    "surfboard",
+    "tennis racket",
+    "bottle",
+    "wine glass",
+    "cup",
+    "fork",
+    "knife",
+    "spoon",
+    "bowl",
+    "banana",
+    "apple",
+    "sandwich",
+    "orange",
+    "broccoli",
+    "carrot",
+    "hot dog",
+    "pizza",
+    "donut",
+    "cake",
+    "chair",
+    "sofa",
+    "pottedplant",
+    "bed",
+    "diningtable",
+    "toilet",
+    "tvmonitor",
+    "laptop",
+    "mouse",
+    "remote",
+    "keyboard",
+    "cell phone",
+    "microwave",
+    "oven",
+    "toaster",
+    "sink",
+    "refrigerator",
+    "book",
+    "clock",
+    "vase",
+    "scissors",
+    "teddy bear",
+    "hair drier",
+    "toothbrush",
+]
+
 
 def process_frame(frame, classNames, model):
     # Convert frame to RGB format
@@ -46,7 +119,7 @@ def process_frame(frame, classNames, model):
         for box in boxes:
             # Calculate confidence
             confidence = math.ceil((box.conf[0] * 100)) / 100
-            if confidence < 0.5:
+            if confidence < 0.6:
                 continue
 
             # Get bounding box coordinates
@@ -65,9 +138,18 @@ def process_frame(frame, classNames, model):
             fontScale = 1
             color = (255, 0, 0)
             thickness = 2
-            cv2.putText(frame, classNames[cls] + " " + str(confidence), org, font, fontScale, color, thickness)
+            cv2.putText(
+                frame,
+                classNames[cls] + " " + str(confidence),
+                org,
+                font,
+                fontScale,
+                color,
+                thickness,
+            )
 
     return frame
+
 
 while True:
     # Capture frames from both cameras
@@ -83,11 +165,11 @@ while True:
     frame1_processed = process_frame(frame1, classNames, model)
 
     # Display the results
-    cv2.imshow('Camera 1', frame1_processed)
-    cv2.imshow('Camera 2', frame2_processed)
+    cv2.imshow("Camera 1", frame1_processed)
+    cv2.imshow("Camera 2", frame2_processed)
 
     # Break the loop on 'q' key press
-    if cv2.waitKey(1) == ord('q'):
+    if cv2.waitKey(1) == ord("q"):
         break
 
 # Release resources
