@@ -1,6 +1,9 @@
 import cv2
 import time
 from ultralytics import YOLO
+import torch
+
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 model = YOLO("yolov8n-pose.pt")
 
