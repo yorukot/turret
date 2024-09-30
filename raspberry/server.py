@@ -1,10 +1,11 @@
 import cv2
+import torch
 import zmq
 import numpy as np
 from ultralytics import YOLO
 
-# 初始化 YOLO 模型
-model = YOLO("yolov8n-pose.pt", verbose=False)
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+model = YOLO("../model/yolov8n-pose.pt", verbose=False)
 
 context = zmq.Context()
 socket = context.socket(zmq.SUB)
